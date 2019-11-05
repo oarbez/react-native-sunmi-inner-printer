@@ -9,18 +9,19 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import android.util.Log;
 
 public class PrinterReceiver extends BroadcastReceiver {
-    public PrinterReceiver() {
-    }
-
     @Override
     public void onReceive(Context context, Intent data) {
         String action = data.getAction();
         String type = "PrinterStatus";
         Log.d("PrinterReceiver", action);
 
-        if (SunmiInnerPrinterModule.reactApplicationContext != null) {
-            SunmiInnerPrinterModule.reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        try {
+            if (SunmiInnerPrinterModule.reactApplicationContext != null) {
+                SunmiInnerPrinterModule.reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                     .emit(type, action);
+            }
+        } catch (Exception e) {
+            Log.e("PrinterReceiver", "Unhandled sunmi exception", e);
         }
     }
 }
